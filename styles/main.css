@@ -1,0 +1,403 @@
+/* ============================================================
+   DESIGN TOKENS — single source of truth for all visual values
+   ============================================================ */
+:root {
+  /* Fonts */
+  --font-heading: 'Inter', 'SF Pro Display', 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:    'SF Pro Text', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Colors */
+  --color-accent:          #007AFF;
+  --color-accent-hover:    #0066D6;
+  --color-accent-light:    rgba(0, 122, 255, 0.10);
+  --color-accent-glow:     rgba(0, 122, 255, 0.25);
+  --color-anomaly:         #FF3B30;
+  --color-anomaly-light:   rgba(255, 59, 48, 0.12);
+  --color-success:         #34C759;
+  --color-warning:         #FF9500;
+  --color-forecast:        rgba(0, 122, 255, 0.55);
+
+  /* Background */
+  --color-bg:              #F5F5F7;
+  --color-bg-deep:         #EBEBED;
+  --color-bg-card:         rgba(255, 255, 255, 0.72);
+  --color-bg-card-hover:   rgba(255, 255, 255, 0.88);
+
+  /* Text */
+  --color-text-primary:    #1D1D1F;
+  --color-text-secondary:  #6E6E73;
+  --color-text-tertiary:   #98989D;
+
+  /* Borders & glass */
+  --color-border:          rgba(0, 0, 0, 0.06);
+  --color-border-glass:    rgba(255, 255, 255, 0.50);
+
+  /* Shadows */
+  --shadow-sm:   0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:   0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05);
+  --shadow-lg:   0 8px 32px rgba(0,0,0,0.09), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 0 3px var(--color-accent-glow);
+
+  /* Spacing (8px base) */
+  --sp-1:  0.25rem;   /*  4px */
+  --sp-2:  0.5rem;    /*  8px */
+  --sp-3:  0.75rem;   /* 12px */
+  --sp-4:  1rem;      /* 16px */
+  --sp-5:  1.25rem;   /* 20px */
+  --sp-6:  1.5rem;    /* 24px */
+  --sp-8:  2rem;      /* 32px */
+  --sp-10: 2.5rem;    /* 40px */
+  --sp-12: 3rem;      /* 48px */
+  --sp-16: 4rem;      /* 64px */
+
+  /* Border radius */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease:       cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast:     120ms var(--ease);
+  --t-normal:   250ms var(--ease);
+  --t-slow:     400ms var(--ease);
+
+  /* Layout */
+  --nav-height:       60px;
+  --sidebar-width:    300px;
+  --content-max:      1440px;
+  --workspace-gap:    var(--sp-5);
+  --workspace-pad:    var(--sp-6);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background: var(--color-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+.t-display {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+}
+
+.t-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+
+.t-subheading {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.t-body {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.t-caption {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.t-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.t-mono {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.875rem;
+}
+
+/* ============================================================
+   LAYOUT — sticky nav + two-panel workspace
+   ============================================================ */
+
+/* Nav pushes content down */
+body {
+  padding-top: var(--nav-height);
+}
+
+/* Main workspace grid */
+.workspace {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-rows: 1fr;
+  gap: var(--workspace-gap);
+  padding: var(--workspace-pad);
+  max-width: var(--content-max);
+  margin: 0 auto;
+  min-height: calc(100vh - var(--nav-height));
+  align-items: start;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  position: sticky;
+  top: calc(var(--nav-height) + var(--sp-6));
+  max-height: calc(100vh - var(--nav-height) - var(--sp-12));
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.sidebar::-webkit-scrollbar { display: none; }
+
+/* Main area */
+.main-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0; /* prevent overflow in grid */
+}
+
+/* ============================================================
+   GLASSMORPHISM — shared card base
+   ============================================================ */
+.glass-panel {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--t-normal), background var(--t-normal);
+}
+.glass-panel:hover {
+  background: var(--color-bg-card-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================================
+   CHART AREA
+   ============================================================ */
+.chart-card {
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+}
+
+.chart-card--secondary {
+  padding: var(--sp-4) var(--sp-6) var(--sp-5);
+}
+
+.chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--sp-4);
+  gap: var(--sp-4);
+}
+
+.chart-title {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.chart-subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--sp-1);
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 360px;
+}
+.chart-wrapper--secondary {
+  height: 120px;
+}
+
+/* ============================================================
+   INFO ROW — explanation + stats
+   ============================================================ */
+.info-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--sp-4);
+  align-items: start;
+}
+
+.explanation-card {
+  padding: var(--sp-5) var(--sp-6);
+  flex: 1;
+}
+
+.card-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--sp-2);
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin-bottom: var(--sp-3);
+}
+
+.card-body {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+/* Stats grid */
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 200px;
+}
+
+/* ============================================================
+   CHART LEGEND
+   ============================================================ */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.legend-swatch {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.legend-swatch--dashed {
+  background: repeating-linear-gradient(
+    90deg,
+    currentColor 0, currentColor 4px,
+    transparent 4px, transparent 8px
+  );
+  height: 2px;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.anim-fade-up {
+  animation: fadeUp var(--t-slow) both;
+}
+
+/* Staggered param cards */
+#controls-container > *:nth-child(1) { animation-delay: 0ms; }
+#controls-container > *:nth-child(2) { animation-delay: 50ms; }
+#controls-container > *:nth-child(3) { animation-delay: 100ms; }
+#controls-container > *:nth-child(4) { animation-delay: 150ms; }
+#controls-container > *:nth-child(5) { animation-delay: 200ms; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet: sidebar collapses to narrower */
+@media (max-width: 960px) {
+  :root { --sidebar-width: 260px; }
+}
+
+/* Mobile: single column */
+@media (max-width: 680px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    padding: var(--sp-4);
+    gap: var(--sp-4);
+  }
+
+  .sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .chart-wrapper      { height: 260px; }
+  .chart-wrapper--secondary { height: 100px; }
+
+  .info-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+    min-width: unset;
+  }
+}
